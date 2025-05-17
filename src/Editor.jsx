@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { createEditor, Editor, Element as SlateElement } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import Toolbar from "./ToolBar";
+import serializeToMarkdown from "./slateToMarkdown";
 
 const Element = ({ attributes, children, element }) => {
   switch (element.type) {
@@ -78,27 +79,40 @@ const SlateEditor = () => {
   ]);
 
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      initialValue={value}
-      onChange={(newValue) => setValue(newValue)}
-    >
-      <Toolbar />
-      <Editable
-        renderElement={(props) => <Element {...props} />}
-        renderLeaf={(props) => <Leaf {...props} />}
-        placeholder="Type something..."
-        spellCheck
-        autoFocus
-        style={{
-          border: "1px solid #ccc",
-          borderRadius: 4,
-          padding: 12,
-          minHeight: "300px",
-        }}
-      />
-    </Slate>
+    <>
+      <Slate
+        editor={editor}
+        value={value}
+        initialValue={value}
+        onChange={(newValue) => setValue(newValue)}
+      >
+        <Toolbar />
+        <Editable
+          renderElement={(props) => <Element {...props} />}
+          renderLeaf={(props) => <Leaf {...props} />}
+          placeholder="Type something..."
+          spellCheck
+          autoFocus
+          style={{
+            border: "1px solid #ccc",
+            borderRadius: 4,
+            padding: 12,
+            minHeight: "300px",
+          }}
+        />
+      </Slate>
+      <div className="w-full flex items-center justify-center">
+        <button
+          onClick={() => {
+            const markdown = serializeToMarkdown(value);
+            console.log(markdown);
+          }}
+          className="btn mt-4 bg-blue-600 text-xl font-bold px-4 py-1 text-white rounded hover:cursor-pointer"
+        >
+          Post
+        </button>
+      </div>
+    </>
   );
 };
 

@@ -41,7 +41,6 @@ const Toolbar = () => {
 
   useEffect(() => {
     const { selection } = editor;
-
     const handler = () => forceUpdate((prev) => prev + 1);
 
     const { onChange } = editor;
@@ -51,9 +50,9 @@ const Toolbar = () => {
     };
 
     return () => {
-      editor.onChange = onChange; // restore if unmounted
+      editor.onChange = onChange;
     };
-  }, [editor]);
+  }, []);
 
   const onImageChange = (e) => {
     const file = e.target.files[0];
@@ -70,15 +69,20 @@ const Toolbar = () => {
   };
 
   return (
-    <div className="flex flex-wrap gap-2 mb-3 items-center">
+    <div className="flex flex-wrap gap-2 p-2 bg-gray-100 border border-gray-200 rounded-md mb-3">
       <button
         onMouseDown={(e) => {
           e.preventDefault();
           toggleMark(editor, "bold");
         }}
-        className={isMarkActive(editor, "bold") ? "btn-active" : "btn"}
+        className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+          isMarkActive(editor, "bold")
+            ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+            : ""
+        }`}
+        title="Bold"
       >
-        <FaBold />
+        <FaBold className="text-base" />
       </button>
 
       <button
@@ -86,9 +90,14 @@ const Toolbar = () => {
           e.preventDefault();
           toggleMark(editor, "italic");
         }}
-        className={isMarkActive(editor, "italic") ? "btn-active" : "btn"}
+        className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+          isMarkActive(editor, "italic")
+            ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+            : ""
+        }`}
+        title="Italic"
       >
-        <FaItalic />
+        <FaItalic className="text-base" />
       </button>
 
       <button
@@ -96,9 +105,14 @@ const Toolbar = () => {
           e.preventDefault();
           toggleMark(editor, "underline");
         }}
-        className={isMarkActive(editor, "underline") ? "btn-active" : "btn"}
+        className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+          isMarkActive(editor, "underline")
+            ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+            : ""
+        }`}
+        title="Underline"
       >
-        <FaUnderline />
+        <FaUnderline className="text-base" />
       </button>
 
       <button
@@ -106,101 +120,130 @@ const Toolbar = () => {
           e.preventDefault();
           toggleMark(editor, "code");
         }}
-        className={isMarkActive(editor, "code") ? "btn-active" : "btn"}
+        className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+          isMarkActive(editor, "code")
+            ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+            : ""
+        }`}
+        title="Code"
       >
-        <FaCode />
+        <FaCode className="text-base" />
       </button>
 
-      {FONT_SIZES.map((size) => (
+      <div className="flex gap-1 p-1 bg-white border border-gray-200 rounded-md">
+        {FONT_SIZES.map((size) => (
+          <button
+            key={size}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              toggleFontSize(editor, size);
+            }}
+            className={`flex items-center gap-1 px-3 py-1.5 text-xs text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+              activeFontSize === size
+                ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+                : ""
+            }`}
+            title={`Font Size ${size}`}
+          >
+            <FaFont className="text-base" />
+            <span>{size}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex gap-1 p-1 bg-white border border-gray-200 rounded-md">
         <button
-          key={size}
           onMouseDown={(e) => {
             e.preventDefault();
-            toggleFontSize(editor, size);
+            toggleBlock(editor, "heading-one");
           }}
-          className={activeFontSize === size ? "btn-active" : "btn"}
+          className={`flex items-center gap-1 px-3 py-1.5 text-xs text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+            isBlockActive(editor, "heading-one")
+              ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+              : ""
+          }`}
+          title="Heading 1"
         >
-          <FaFont />
-          <span>{size}</span>
+          <FaHeading className="text-base" />
+          <span>H1</span>
         </button>
-      ))}
 
-      {/* Headings */}
-      <button
-        onMouseDown={(e) => {
-          e.preventDefault();
-          toggleBlock(editor, "heading-one");
-        }}
-        className={isBlockActive(editor, "heading-one") ? "btn-active" : "btn"}
-      >
-        <FaHeading />
-        <span>H1</span>
-      </button>
+        <button
+          onMouseDown={(e) => {
+            e.preventDefault();
+            toggleBlock(editor, "heading-two");
+          }}
+          className={`flex items-center gap-1 px-3 py-1.5 text-xs text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+            isBlockActive(editor, "heading-two")
+              ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+              : ""
+          }`}
+          title="Heading 2"
+        >
+          <FaHeading className="text-base" />
+          <span>H2</span>
+        </button>
+      </div>
 
-      <button
-        onMouseDown={(e) => {
-          e.preventDefault();
-          toggleBlock(editor, "heading-two");
-        }}
-        className={isBlockActive(editor, "heading-two") ? "btn-active" : "btn"}
-      >
-        <FaHeading />
-        <span>H2</span>
-      </button>
+      <div className="flex gap-1 p-1 bg-white border border-gray-200 rounded-md">
+        <button
+          onMouseDown={(e) => {
+            e.preventDefault();
+            toggleBlock(editor, "bulleted-list");
+          }}
+          className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+            isBlockActive(editor, "bulleted-list")
+              ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+              : ""
+          }`}
+          title="Bulleted List"
+        >
+          <FaListUl className="text-base" />
+        </button>
 
-      {/* Lists */}
-      <button
-        onMouseDown={(e) => {
-          e.preventDefault();
-          toggleBlock(editor, "bulleted-list");
-        }}
-        className={
-          isBlockActive(editor, "bulleted-list") ? "btn-active" : "btn"
-        }
-      >
-        <FaListUl />
-      </button>
+        <button
+          onMouseDown={(e) => {
+            e.preventDefault();
+            toggleBlock(editor, "numbered-list");
+          }}
+          className={`flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400 ${
+            isBlockActive(editor, "numbered-list")
+              ? "bg-blue-500 text-white font-semibold border-blue-600 hover:bg-blue-600"
+              : ""
+          }`}
+          title="Numbered List"
+        >
+          <FaListOl className="text-base" />
+        </button>
+      </div>
 
-      <button
-        onMouseDown={(e) => {
-          e.preventDefault();
-          toggleBlock(editor, "numbered-list");
-        }}
-        className={
-          isBlockActive(editor, "numbered-list") ? "btn-active" : "btn"
-        }
-      >
-        <FaListOl />
-      </button>
-
-      {/* Horizontal Rule */}
       <button
         onMouseDown={(e) => {
           e.preventDefault();
           insertHorizontalRule(editor);
         }}
-        className="btn"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400"
+        title="Horizontal Rule"
       >
-        <FaMinus />
+        <FaMinus className="text-base" />
       </button>
 
-      {/* Insert Table */}
       <button
         onMouseDown={(e) => {
           e.preventDefault();
           insertTable(editor);
         }}
-        className="btn"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400"
+        title="Insert Table"
       >
-        <FaTable />
+        <FaTable className="text-base" />
       </button>
 
-      {/* Image Upload */}
       <input
         type="file"
         accept="image/*"
         ref={imageInputRef}
-        style={{ display: "none" }}
+        className="hidden"
         onChange={onImageChange}
       />
       <button
@@ -208,17 +251,17 @@ const Toolbar = () => {
           e.preventDefault();
           imageInputRef.current.click();
         }}
-        className="btn"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400"
+        title="Insert Image"
       >
-        <FaImage />
+        <FaImage className="text-base" />
       </button>
 
-      {/* Video Upload */}
       <input
         type="file"
         accept="video/*"
         ref={videoInputRef}
-        style={{ display: "none" }}
+        className="hidden"
         onChange={onVideoChange}
       />
       <button
@@ -226,20 +269,21 @@ const Toolbar = () => {
           e.preventDefault();
           videoInputRef.current.click();
         }}
-        className="btn"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400"
+        title="Insert Video"
       >
-        <FaUpload />
+        <FaUpload className="text-base" />
       </button>
 
-      {/* Remove Node */}
       <button
         onMouseDown={(e) => {
           e.preventDefault();
           removeNode(editor);
         }}
-        className="btn"
+        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md transition-all hover:bg-gray-100 hover:border-gray-400"
+        title="Remove Node"
       >
-        <FaTrash />
+        <FaTrash className="text-base" />
       </button>
     </div>
   );
