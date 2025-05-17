@@ -79,7 +79,7 @@ const SlateEditor = () => {
   ]);
 
   return (
-    <>
+    <div className="max-w-full overflow-hidden">
       <Slate
         editor={editor}
         value={value}
@@ -112,7 +112,7 @@ const SlateEditor = () => {
           Post
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
